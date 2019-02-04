@@ -1,12 +1,30 @@
 ##HOMEWORK 1##
-1. How many genes are on chromosome II in saccharomyces_cerevisiare_R64-2-1_20150113.gff ?
+1. How many genes are on chromosome II in saccharomyces_cerevisiare_R64-2-1_20150113.gff?
+
+	Command: grep -w 'gene' data/saccharomyces_cerevisiae_R64-2-1_20150113.gff | grep -wc 'chrII'
+	Output: 463
+
+There are 463 genes in chromosome II in the yeast genome. Since gene occurs several times in lines chrII was chosen as the last grep word to avoid overcalculation. 
 
 2. Gount GC content in S288C_reference_sequence_R64-2-1_20150113.fsa
 
+	Command: grep -v '^>' data/S288C_reference_sequence_R64-2-1_20150113.fsa > results/results_190204/noheadline.txt 
+		 tr -d '\n' < results/results_190204/noheadline.txt > results/results_190204/nonewline.txt  #To remove newlines
+		 grep -o '[GC]' results/results_190204/nonewline.txt | wc -l #Filter G and C which in the output will be on a new row each letter. wc the lines.
+	Output: 4637676
+
+The GC content is 4637676 bases in the reference genome. 
+		
 3. Dowload and decompress the ORFs of strain Y55 from https://downloads.yeastgenome.org/sequence/strains/Y55/Y55_SGD_2015_JRIF00000000/Y55_JRIF00000000_SGD_cds.fsa.gz
 
 	a) Compare GC content in this file with the value in 2. 
 
+	Commands: grep -v '^>' data/Y55_JRIF00000000_SGD_cds.fsa > results/results_190204/noheadlineY55.txt
+		  tr -d '\n' < results/results_190204/noheadlineY55.txt > results/results_190204/nonewlineY55.txt
+		  grep -o '[GC]' results/results_190204/nonewlineY55.txt | wc -l
+	Output: 3191935
+
 	b) Compare number of ORFs in this strain with the number in the reference genome
 
 	c) Count the common ORFs between this yeast strain and the reference previously worked with in 1. and 2. 
+
