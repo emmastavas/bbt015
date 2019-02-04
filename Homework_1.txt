@@ -1,1 +1,12 @@
 ##HOMEWORK 1##
+1. How many genes are on chromosome II in saccharomyces_cerevisiare_R64-2-1_20150113.gff ?
+
+2. Gount GC content in S288C_reference_sequence_R64-2-1_20150113.fsa
+
+3. Dowload and decompress the ORFs of strain Y55 from https://downloads.yeastgenome.org/sequence/strains/Y55/Y55_SGD_2015_JRIF00000000/Y55_JRIF00000000_SGD_cds.fsa.gz
+
+	a) Compare GC content in this file with the value in 2. 
+
+	b) Compare number of ORFs in this strain with the number in the reference genome
+
+	c) Count the common ORFs between this yeast strain and the reference previously worked with in 1. and 2. 
