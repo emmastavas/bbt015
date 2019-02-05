@@ -8,9 +8,9 @@ There are 463 genes in chromosome II in the yeast genome. Since gene occurs seve
 
 2. Gount GC content in S288C_reference_sequence_R64-2-1_20150113.fsa
 
-	Command: grep -v '^>' data/S288C_reference_sequence_R64-2-1_20150113.fsa > results/results_190204/noheadline.txt 
+	Command: grep -v '^>' data/S288C_reference_sequence_R64-2-1_20150113.fsa > results/results_190204/noheadline.txt #remove  headline 
 		 tr -d '\n' < results/results_190204/noheadline.txt > results/results_190204/nonewline.txt  #To remove newlines
-		 grep -o '[GC]' results/results_190204/nonewline.txt | wc -l #Filter G and C which in the output will be on a new row each letter. wc the lines.
+		 grep -o '[GC]' results/results_190204/nonewline.txt | wc -l #Filter G and C which in the output will be on a new row  each letter. wc the lines.
 	Output: 4637676
 
 The GC content is 4637676 bases in the reference genome. 
@@ -25,6 +25,27 @@ The GC content is 4637676 bases in the reference genome.
 	Output: 3191935
 
 	b) Compare number of ORFs in this strain with the number in the reference genome
+	
+	Y55 genome:
+	
+		Command: grep '^>' data/Y55_JRIF00000000_SGD_cds.fsa | wc -l #grep all lines (ORFs) and count them 
+		Output: 5330
+	
+	(Noteworthy is that if the same command is run but 'ORF' is used insted of '^>' the output is 5329, which I am not sure 		why. Maybe there is an error in the file?)
+		
+	S288C genome: 	
+		
+		Command: grep '^>' data/orf_coding_all_R64-2-1_20150113.fasta | wc -l
+		Output: 6713
 
 	c) Count the common ORFs between this yeast strain and the reference previously worked with in 1. and 2. 
+	
+	Y55 genome and S288C genome:
+	
+		Commands: grep -o '^>Y......' data/Y55_JRIF00000000_SGD_cds.fsa | sort > results/results_190205/sorted_Y55.txt  #Grab 				  annotation only from Y55 strain
+			  grep -o '^>.......' data/orf_coding_all_R64-2-1_20150113.fasta | sort > results/results_190205/sorted_S288C.txt #Grab annotations from original strain 
+			  comm -12 results/results_190205/sorted_Y55.txt results/results_190205/sorted_S288C.txt | wc -l #Take the common ORFs (-12 mean removing the first and second column of comm output which we are not interested in) and pipe into wc for lines (each common orf will be on an own line)
+		Output: 5168
+		
+	There are 5168 common ORfs between the strains.
 
