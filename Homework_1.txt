@@ -1,3 +1,75 @@
+2. Analyze files
+
+	1. Count lines in orf_coding_all_R64-2-1_20150113.fasta and orf_trans_all_R64-2-1_20150113.fasta
+	
+		Command: wc -l data/orf_coding_all_R64-2-1_20150113.fasta
+		Output: 161265
+	
+		Command: wc -l data/orf_trans_all_R64-2-1_20150113.fasta
+		Output: 60443
+	
+	2. Count genes in orf_coding_all_R64-2-1_20150113.fasta 
+	
+		Command: grep -c '>' data/orf_coding_all_R64-2-1_20150113.fasta
+		Output: 6713
+		
+	3. Save number of genes from 2. in counts.txt
+	
+		Command: grep -c '>' data/orf_coding_all_R64-2-1_20150113.fasta > results_190203/counts.txt
+		Output: -
+		
+	4. Count tRNA genes in rna_coding_R64-2-1_20150113.fasta
+		
+		Command: rep -c 'tRNA_gene' data/rna_coding_R64-2-1_20150113.fasta
+		Output: 299
+		
+	5. Save results from 4. in counts.txt
+	
+		Command: grep -c 'tRNA_gene' data/rna_coding_R64-2-1_20150113.fasta >> results_190203/counts.txt
+		Output: -
+		
+	6. Inspect counts.txt
+		
+		Command: cat results_190203/counts.txt
+		Output: -
+		
+	7. Copy counts.txt and name it counts.txt.orig
+	
+		Command: cp counts.txt counts.txt.orig
+		Output: -
+		
+3. Working with text columns
+
+	Get data with
+	Command: wget http://www.cbs.dtu.dk/courses/27619/ex1.dat
+	
+	Annotations
+	Command: wget http://www.cbs.dtu.dk/courses/27619/ex1.acc
+	
+	Merge the two
+	Command: paste ex1.acc ex1.dat
+	
+4. Count yeast-human orthologs
+
+	1. Get data
+	
+		Commands:
+		wget http://eggnog5.embl.de/download/eggnog_5.0/data/2759/2759_members.tsv.gz
+		gunzip 2759_members.tsv.gz
+	
+	2. Filer lines, extract ID, sort, save it to files
+	
+		Command: comm -12 <(grep "4891." 2759_members.tsv | cut -f 2 | sort) <(grep "9606." 2759_members.tsv | cut -f 2 | sort) | wc -l
+		
+		Note: -12 inhibits the first 2 results. cut -f 2 cuts out column 2.
+		
+		Output: 838
+		
+5. Sequence Processing
+	
+	Command: sed '/^>/!y/ACGT/UGCA/' orf_coding_all_R64-2-1_20150113.fasta > orf_coding_all_R64-2-1_20150113_RNA.fasta
+
+
 ##HOMEWORK 1##
 1. How many genes are on chromosome II in saccharomyces_cerevisiare_R64-2-1_20150113.gff?
 
@@ -11,7 +83,7 @@ There are 463 genes in chromosome II in the yeast genome. Since gene occurs seve
 	Command: grep -v '^>' data/S288C_reference_sequence_R64-2-1_20150113.fsa > results/results_190204/noheadline.txt #remove  headline 
 		 tr -d '\n' < results/results_190204/noheadline.txt > results/results_190204/nonewline.txt  #To remove newlines
 		 grep -o '[GC]' results/results_190204/nonewline.txt | wc -l #Filter G and C which in the output will be on a new row  each letter. wc the lines.
-	Output: 4637676
+	Output: 4637676 or 38%
 
 The GC content is 4637676 bases in the reference genome. 
 		
@@ -22,7 +94,7 @@ The GC content is 4637676 bases in the reference genome.
 	Commands: grep -v '^>' data/Y55_JRIF00000000_SGD_cds.fsa > results/results_190204/noheadlineY55.txt
 		  tr -d '\n' < results/results_190204/noheadlineY55.txt > results/results_190204/nonewlineY55.txt
 		  grep -o '[GC]' results/results_190204/nonewlineY55.txt | wc -l
-	Output: 3191935
+	Output: 3191935 or 39.5% (without N:s)
 
 	b) Compare number of ORFs in this strain with the number in the reference genome
 	
@@ -42,9 +114,9 @@ The GC content is 4637676 bases in the reference genome.
 	
 	Y55 genome and S288C genome:
 	
-		Commands: grep -o '^>Y......' data/Y55_JRIF00000000_SGD_cds.fsa | sort > results/results_190205/sorted_Y55.txt  #Grab 				  annotation only from Y55 strain
+		Commands: grep -o '^>Y......' data/Y55_JRIF00000000_SGD_cds.fsa | sort > results/results_190205/sorted_Y55.txt  #Grab 				  annotation only from Y55 strain. All common ORFs start with Y. 
 			  grep -o '^>.......' data/orf_coding_all_R64-2-1_20150113.fasta | sort > results/results_190205/sorted_S288C.txt #Grab annotations from original strain 
-			  comm -12 results/results_190205/sorted_Y55.txt results/results_190205/sorted_S288C.txt | wc -l #Take the common ORFs (-12 mean removing the first and second column of comm output which we are not interested in) and pipe into wc for lines (each common orf will be on an own line)
+			  comm -12 results/results_190205/sorted_Y55.txt results/results_190205/sorted_S288C.txt | wc -l #Take the 				  common ORFs (-12 mean removing the first and second column of comm output which we are not interested in) and 			  pipe into wc for lines (each common orf will be on an own line)
 		Output: 5168
 		
 	There are 5168 common ORfs between the strains.
